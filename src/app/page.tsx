@@ -1,7 +1,15 @@
 'use client'
 import React, { useState } from 'react';
-import FileUploader from './component/fileUploader';
-import MapVisualize from './component/mapVisualize';
+import dynamic from 'next/dynamic';
+
+// Dynamically import the Header component with SSR disabled
+const DynamicMapVisualize = dynamic(() => import('./component/mapVisualize'), {
+  ssr: false,
+});
+
+const DynamicFileUploader = dynamic(() => import('./component/fileUploader'), {
+  ssr: false,
+});
 
 const MyComponent: React.FC = () => {
   const [uploadedFiles, setUploadedFiles] = useState<File | null>(null);
@@ -13,8 +21,8 @@ const MyComponent: React.FC = () => {
   return (
     <div>
       <h1>Upload GeoJSON File</h1>
-      <FileUploader onFileUpload={handleGeoJSONUpload} />
-      <MapVisualize geoJSONData={uploadedFiles}/>
+      <DynamicFileUploader onFileUpload={handleGeoJSONUpload} />
+      <DynamicMapVisualize geoJSONData={uploadedFiles}/>
     </div>
   );
 };

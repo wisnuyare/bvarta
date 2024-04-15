@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
@@ -30,12 +30,6 @@ const MapVisualize: React.FC<MapVisualizeProps> = (geoJSONData : any) => {
   return (
     <div>
       <div id="map" style={{ height: '400px' }} />
-      {geoJSONData.geoJSONData && (
-        <div>
-          <h2>GeoJSON Data:</h2>
-          <pre>{JSON.stringify(geoJSONData, null, 2)}</pre>
-        </div>
-      )}
     </div>
   );
 };
