@@ -18,7 +18,7 @@ interface MapVisualizeProps {
 const MapVisualize: React.FC<MapVisualizeProps> = (geoJSONData : any) => {
     useEffect(() => {
         if (geoJSONData.geoJSONData) {
-          const map = L.map('map').setView([0, 0], 2);
+          const map = L.map('map').setView([0, 0], 3);
           L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           }).addTo(map);
@@ -29,7 +29,13 @@ const MapVisualize: React.FC<MapVisualizeProps> = (geoJSONData : any) => {
 
   return (
     <div>
-      <div id="map" style={{ height: '400px' }} />
+      <div id="map" style={{ height: '800px' }} />
+      {geoJSONData.geoJSONData && (
+        <div>
+          <h2>GeoJSON Data:</h2>
+          <pre>{JSON.stringify(geoJSONData, null, 2)}</pre>
+        </div>
+      )}
     </div>
   );
 };
