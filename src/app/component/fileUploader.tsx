@@ -5,10 +5,27 @@ interface FileUploaderProps {
 }
 
 const FileUploader: React.FC<FileUploaderProps> = ({ onFileUpload }) => {
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = event.target.files && event.target.files[0];
     if (selectedFile) {
-      readGeoJSONFile(selectedFile);
+      try {
+        const formData = new FormData();
+        formData.append('file', selectedFile);
+
+        const response = await fetch('api/', {
+          method: 'POST',
+          body: formData,
+        });
+
+        if (!response.ok) {
+          console.log('error')
+          throw new Error('Upload failed');
+        }
+        await readGeoJSONFile(selectedFile);
+      } catch (error) {
+        console.error('Upload error:', error);
+        // toast.error('An error occurred during upload');
+      }
     }
   };
 
@@ -18,6 +35,7 @@ const FileUploader: React.FC<FileUploaderProps> = ({ onFileUpload }) => {
       reader.onload = (event) => {
         if (event.target && event.target.result) {
           const geoJSONData = JSON.parse(event.target.result as string);
+          console.log(Date.now(), geoJSONData)
           onFileUpload(geoJSONData);
           resolve();
         } else {
@@ -29,13 +47,16 @@ const FileUploader: React.FC<FileUploaderProps> = ({ onFileUpload }) => {
   };
 
   return (
-    <div>
-      <input
-        type="file"
-        accept=".geojson"
-        onChange={handleFileChange}
-        data-testid="file-input"
-      />
+    <div className="flex justify-center items-center">
+      <div className="mx-auto px-4 py-8">
+        <input
+          type="file"
+          accept=".geojson"
+          onChange={handleFileChange}
+          className="border border-gray-300 rounded-md p-2"
+          data-testid="file-input"
+        />
+      </div>
     </div>
   );
 };
